@@ -5,6 +5,7 @@ using UnityEngine;
 public class GroundMovement : MonoBehaviour
 {
     public GameObject Movement;
+    public float forwardSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,6 @@ public class GroundMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime);
+        transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime);
     }
 }
