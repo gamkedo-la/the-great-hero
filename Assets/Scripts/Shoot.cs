@@ -23,7 +23,9 @@ public class Shoot : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(bullet, bulletSpawnLocation, transform.rotation);
+            
+            GameObject shot = Instantiate(bullet, bulletSpawnLocation, transform.rotation);
+            shot.transform.SetParent(FromAnywhereSingleton.instance.transform);
         }
     }
 }
