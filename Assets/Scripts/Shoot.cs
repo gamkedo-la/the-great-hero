@@ -23,7 +23,7 @@ public class Shoot : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(bullet, bulletSpawnLocation, Quaternion.identity);
+            Instantiate(bullet, bulletSpawnLocation, transform.rotation);
         }
     }
 }
