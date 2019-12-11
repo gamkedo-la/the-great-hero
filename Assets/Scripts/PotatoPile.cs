@@ -15,7 +15,9 @@ public class PotatoPile : MonoBehaviour
 		if (potates.Count > 0)
 		{
 			potato = potates[potates.Count - 1];
-			potates.Remove(potato);
+
+			//TODO put back when potatos are more functional
+			//potates.Remove(potato);
 		}
 
 		return potato;
