@@ -18,9 +18,8 @@ public class RoboCarSpawner : MonoBehaviour
 	[Tooltip("Spawned every x serconds")]
 	private float spawnRate;
 	
-
 	[SerializeField]
-	private Transform potatoHolderTransform;
+	private PotatoPile potatoPile;
 
 	private float timer = 0f;
 
@@ -56,7 +55,7 @@ public class RoboCarSpawner : MonoBehaviour
 		roboCar.transform.position = spawnLocation;
 
 		spawnLocation.z = TARGET_Z_POS;
-		roboCar.Initialize(spawnLocation);
+		roboCar.Initialize(potatoPile, spawnLocation);
 
 		roboCar.gameObject.SetActive(true);
 	}
