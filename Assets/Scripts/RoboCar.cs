@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,13 @@ public class RoboCar : MonoBehaviour
 	[SerializeField]
 	private float stealTime;
 
+	[SerializeField]
+	private int hitPoints;
+	[SerializeField]
+	private List<CollisionReporter> collisionReporters;
+
+	public Action<RoboCar> DestroyedAction;
+
 	private PotatoPile potatoes;
 	private Coroutine stealRoutine;
 
@@ -29,10 +37,25 @@ public class RoboCar : MonoBehaviour
 	private Vector3 targetPosition;
 
 	private bool initialized;
+	private bool takenDamageThisFrame;
+	private int maxHitPoints;
+
+	private void Awake()
+	{
+		foreach (var reporter in collisionReporters)
+		{
+			reporter.OnCollitionEvent += OnCollisionHandler;
+		}
+
+		maxHitPoints = hitPoints;
+	}
+
 
 	public void Initialize(PotatoPile potatoPile, Vector3 targetPosition)
 	{
 		potatoes = potatoPile;
+
+		hitPoints = maxHitPoints;
 
 		startPosition = transform.position;
 		this.targetPosition = targetPosition;
@@ -69,7 +92,46 @@ public class RoboCar : MonoBehaviour
 					transform.position = Vector3.MoveTowards(transform.position, startPosition, (moveSpeed * 2f) * Time.deltaTime);
 					break;
 			}
+
+
+			takenDamageThisFrame = false;
 		}
+	}
+
+
+	private void OnCollisionHandler(Collision collision)
+	{
+		if (initialized)
+		{
+			TakeDamage();
+		}
+	}
+
+	private void TakeDamage()
+	{
+		if (takenDamageThisFrame == false)
+		{
+			takenDamageThisFrame = true;
+
+			hitPoints--;
+
+			if (hitPoints <= 0)
+			{
+				Destroyed();
+			}
+
+			//Play on hit animatino/vfx
+		}
+	}
+
+	private void Destroyed()
+	{
+		//Play death animation
+
+		StopAllCoroutines();
+		initialized = false;
+
+		DestroyedAction?.Invoke(this);
 	}
 
 	private IEnumerator StealPotatoRoutine()

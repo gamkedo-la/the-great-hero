@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,16 +58,25 @@ public class RoboCarSpawner : MonoBehaviour
 		spawnLocation.z = TARGET_Z_POS;
 		roboCar.Initialize(potatoPile, spawnLocation);
 
+		roboCar.DestroyedAction += OnRoboCarDestroyed;
+
 		roboCar.gameObject.SetActive(true);
+	}
+
+	private void OnRoboCarDestroyed(RoboCar roboCar)
+	{
+		roboCar.DestroyedAction -= OnRoboCarDestroyed;
+
+		roboCarPool.ReturnObject(roboCar);
 	}
 
 	private Vector3 GetSpawnLocation()
 	{
 		Vector3 spawnLocation = Vector3.zero;
 
-		spawnLocation.x = Random.Range(spawnLocationMin.position.x, spwnLocationMax.position.x);
-		spawnLocation.y = Random.Range(spawnLocationMin.position.y, spwnLocationMax.position.y);
-		spawnLocation.z = Random.Range(spawnLocationMin.position.z, spwnLocationMax.position.z);
+		spawnLocation.x = UnityEngine.Random.Range(spawnLocationMin.position.x, spwnLocationMax.position.x);
+		spawnLocation.y = UnityEngine.Random.Range(spawnLocationMin.position.y, spwnLocationMax.position.y);
+		spawnLocation.z = UnityEngine.Random.Range(spawnLocationMin.position.z, spwnLocationMax.position.z);
 
 		return spawnLocation;
 	}
