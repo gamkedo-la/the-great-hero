@@ -1,56 +1,28 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class RoboCarSpawner : MonoBehaviour
+public class RoboCarSpawner : Spawner
 {
 	private readonly float TARGET_Z_POS = 69.149f;
 
-
-	[SerializeField]
-	private GameObject roboCarPrefab;
-	[SerializeField]
-	private Transform spawnLocationMin;
-	[SerializeField]
-	private Transform spwnLocationMax;
-
-	[SerializeField]
-	[Tooltip("Spawned every x serconds")]
-	private float spawnRate;
-	
+	[Header("References")]
 	[SerializeField]
 	private PotatoPile potatoPile;
 
-	private float timer = 0f;
 
-	private ObjectPool<RoboCar> roboCarPool;
-
-	private void Start()
+	protected override void Start()
 	{
-		//Spawn at the start
-		timer = spawnRate;
+		base.Start();
 
-		roboCarPool = new ObjectPool<RoboCar>();
-		roboCarPool.InitializeObjectPool(roboCarPrefab, 20, transform);
+		componentPool.InitializeObjectPool<RoboCar>(pooledPrefab, pooledCount, transform);
 	}
 
-	private void Update()
+
+	protected override void Spawn()
 	{
-		if(timer >= spawnRate)
-		{
-			//Spawn Robo Car
-			SpawnRoboCar();
+		//Component component = componentPool.GetObject() as RoboCar;
+		RoboCar roboCar = componentPool.GetObject() as RoboCar;
 
-			timer = timer - spawnRate;
-		}
-
-		timer += Time.deltaTime;
-	}
-
-	private void SpawnRoboCar()
-	{
-		RoboCar roboCar = roboCarPool.GetObject();
+		//RoboCar roboCar = component.GetComponent<RoboCar>();
 
 		Vector3 spawnLocation = GetSpawnLocation();
 		roboCar.transform.position = spawnLocation;
@@ -67,18 +39,7 @@ public class RoboCarSpawner : MonoBehaviour
 	{
 		roboCar.DestroyedAction -= OnRoboCarDestroyed;
 
-		roboCarPool.ReturnObject(roboCar);
-	}
-
-	private Vector3 GetSpawnLocation()
-	{
-		Vector3 spawnLocation = Vector3.zero;
-
-		spawnLocation.x = UnityEngine.Random.Range(spawnLocationMin.position.x, spwnLocationMax.position.x);
-		spawnLocation.y = UnityEngine.Random.Range(spawnLocationMin.position.y, spwnLocationMax.position.y);
-		spawnLocation.z = UnityEngine.Random.Range(spawnLocationMin.position.z, spwnLocationMax.position.z);
-
-		return spawnLocation;
+		componentPool.ReturnObject(roboCar);
 	}
 
 }
