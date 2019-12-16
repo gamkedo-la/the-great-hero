@@ -15,8 +15,10 @@ public class RoboCar : MonoBehaviour
 
 	[SerializeField]
 	private Transform armPivotTransform;
+    [SerializeField]
+    private Transform clawTransform;
 
-	[SerializeField]
+    [SerializeField]
 	private float moveSpeed;
 	[SerializeField]
 	private float stealTime;
@@ -145,11 +147,19 @@ public class RoboCar : MonoBehaviour
 
 			armPivotTransform.forward = dir;
 
+            //potato.transform.position = clawTransform.position;
+            while(Vector3.Distance(clawTransform.position, potato.transform.position) > 0.1f)
+            {
+                Vector3 stealDir = potato.transform.position - clawTransform.position;
+                potato.transform.position -= stealDir.normalized * 1.5f * Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
             potato.transform.SetParent(transform);
+
 
 		}
 
-		yield return new WaitForSeconds(stealTime);
+		//yield return new WaitForSeconds(stealTime);
 
 		carState = State.Escape;
 
