@@ -7,8 +7,14 @@ public class PotatoPile : MonoBehaviour
 	[SerializeField]
 	protected List<GameObject> potates;
 
+    private Vector3 startPos;
 
-	public GameObject StealPotato()
+    void Start()
+    {
+        startPos = transform.position;
+    }
+
+    public GameObject StealPotato()
 	{
 		GameObject potato = null;
 
@@ -22,5 +28,12 @@ public class PotatoPile : MonoBehaviour
 
 		return potato;
 	}
+
+    public void ReturnPotato(GameObject potato)
+    {
+        potates.Add(potato);
+        potato.transform.SetParent(null);
+        transform.position = startPos;
+    }
 }
  

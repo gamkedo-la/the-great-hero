@@ -32,6 +32,7 @@ public class RoboCar : MonoBehaviour
 
 	private PotatoPile potatoes;
 	private Coroutine stealRoutine;
+    private GameObject potato; //stealing for if needing to return
 
 	private State carState = State.Approach;
 
@@ -129,7 +130,11 @@ public class RoboCar : MonoBehaviour
 	private void Destroyed()
 	{
 		//Play death animation
-
+        if(potato)
+        {
+            potatoes.ReturnPotato(potato);
+            potato = null;
+        }
 		StopAllCoroutines();
 		initialized = false;
 
@@ -138,7 +143,8 @@ public class RoboCar : MonoBehaviour
 
 	private IEnumerator StealPotatoRoutine()
 	{
-		GameObject potato = potatoes.StealPotato();
+        //TODO: check if there potato is already used
+		potato = potatoes.StealPotato();
 
 		if (potato != null)
 		{
