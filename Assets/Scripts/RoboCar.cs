@@ -144,6 +144,9 @@ public class RoboCar : MonoBehaviour
 			dir = Vector3.ProjectOnPlane(dir, Vector3.up);
 
 			armPivotTransform.forward = dir;
+
+            potato.transform.SetParent(transform);
+
 		}
 
 		yield return new WaitForSeconds(stealTime);

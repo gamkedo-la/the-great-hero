@@ -16,8 +16,8 @@ public class PotatoPile : MonoBehaviour
 		{
 			potato = potates[potates.Count - 1];
 
-			//TODO put back when potatos are more functional
-			//potates.Remove(potato);
+            Debug.Log("Stealing Potato " + potato.name);
+			potates.Remove(potato);
 		}
 
 		return potato;
