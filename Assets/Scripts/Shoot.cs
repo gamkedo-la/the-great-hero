@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
+    public OVRInput.Button whichButton;
 
     public GameObject bullet;
     public GameObject bulletSpawn;
@@ -21,7 +22,7 @@ public class Shoot : MonoBehaviour
         bulletSpawnLocation = bulletSpawn.transform.position;
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || OVRInput.GetDown(whichButton))
         {
             
             GameObject shot = Instantiate(bullet, bulletSpawnLocation, transform.rotation);
