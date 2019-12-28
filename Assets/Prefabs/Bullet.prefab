@@ -135,3 +135,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa871654e48983428dbea859ea9b1c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletDeathFXPrefab: {fileID: 8960546346370009715, guid: c7035f64fa97541bdb5edd335b021d09,
+    type: 3}
