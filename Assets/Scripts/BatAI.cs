@@ -1,9 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class BatAI : MonoBehaviour
 {
+    enum State
+    {
+        Approach,
+        Steal,
+        Escape
+    }
+
     public float batSpeed = 5f;
     public float batHoverAmt = 0.3f;
     public float batHoverSpeed = 4.0f;
@@ -17,7 +25,19 @@ public class BatAI : MonoBehaviour
     private int stateNow = B_State_Approach;
     private Vector3 stealPos = Vector3.zero;
     private float stealStartTime = 0.0f;
-    
+    private PotatoPile potatoes;
+    private Coroutine stealRoutine;
+    private State carState = State.Approach;
+
+    private Vector3 startPosition;
+    private Vector3 targetPosition;
+
+    private bool initialized;
+    private bool takenDamageThisFrame;
+    private int maxHitPoints;
+
+    [SerializeField]
+    private List<CollisionReporter> collisionReporters;
 
     // Start is called before the first frame update
     void Start()

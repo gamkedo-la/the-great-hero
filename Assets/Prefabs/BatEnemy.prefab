@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 1861523181537521982}
   - component: {fileID: 1861523181537521981}
   - component: {fileID: 1861523181537521980}
+  - component: {fileID: 5870965219542159759}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -126,6 +127,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5870965219542159759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861523181537521922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76952f0b32ee183429852a0a93f25bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861523181746507545
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +151,7 @@ GameObject:
   - component: {fileID: 1861523181746507541}
   - component: {fileID: 1861523181746507540}
   - component: {fileID: 1861523181746507547}
+  - component: {fileID: 4162523755763805114}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -217,6 +231,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4162523755763805114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861523181746507545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76952f0b32ee183429852a0a93f25bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861523182055146385
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +395,7 @@ GameObject:
   - component: {fileID: 1861523183218340977}
   - component: {fileID: 1861523183218340976}
   - component: {fileID: 1861523183218340983}
+  - component: {fileID: 9029165370513038103}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -448,3 +475,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9029165370513038103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861523183218340981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76952f0b32ee183429852a0a93f25bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
