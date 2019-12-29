@@ -292,6 +292,15 @@ MonoBehaviour:
   batHoverSpeed: 4
   batHoverDist: 3
   batStealTime: 2
+  armPivotTransform: {fileID: 0}
+  clawTransform: {fileID: 0}
+  moveSpeed: 5
+  stealTime: 2.5
+  hitPoints: 3
+  collisionReporters:
+  - {fileID: 5870965219542159759}
+  - {fileID: 4162523755763805114}
+  - {fileID: 9029165370513038103}
 --- !u!1 &1861523183209369478
 GameObject:
   m_ObjectHideFlags: 0

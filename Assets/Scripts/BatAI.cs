@@ -27,7 +27,10 @@ public class BatAI : MonoBehaviour
     private float stealStartTime = 0.0f;
     private PotatoPile potatoes;
     private Coroutine stealRoutine;
+    private GameObject potato;
     private State carState = State.Approach;
+
+    public Action<BatAI> DestroyedAction;
 
     private Vector3 startPosition;
     private Vector3 targetPosition;
@@ -36,9 +39,48 @@ public class BatAI : MonoBehaviour
     private bool takenDamageThisFrame;
     private int maxHitPoints;
 
+
+    [SerializeField]
+    private Transform armPivotTransform;
+    [SerializeField]
+    private Transform clawTransform;
+
+    [SerializeField]
+    private float moveSpeed;
+    [SerializeField]
+    private float stealTime;
+
+    [SerializeField]
+    private int hitPoints;
+
     [SerializeField]
     private List<CollisionReporter> collisionReporters;
 
+
+    private void Awake()
+    {
+        foreach (var reporter in collisionReporters)
+        {
+            reporter.OnCollitionEvent += OnCollisionHandler;
+        }
+
+        maxHitPoints = hitPoints;
+    }
+
+
+    public void Initialize(PotatoPile potatoPile, Vector3 targetPosition)
+    {
+        potatoes = potatoPile;
+
+        hitPoints = maxHitPoints;
+
+        startPosition = transform.position;
+        this.targetPosition = targetPosition;
+
+        stealRoutine = null;
+
+        initialized = true;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -79,5 +121,106 @@ public class BatAI : MonoBehaviour
             transform.position -= transform.forward * Time.deltaTime * batSpeed;
         }
 
+        if (initialized)
+        {
+            switch (carState)
+            {
+                case State.Approach:
+                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
+                    if (Vector3.Distance(transform.position, targetPosition) == 0)
+                    {
+                        carState = State.Steal;
+                    }
+                    break;
+
+                case State.Steal:
+                    if (stealRoutine == null)
+                    {
+                        stealRoutine = StartCoroutine(StealPotatoRoutine());
+                    }
+                    break;
+
+                case State.Escape:
+                    transform.position = Vector3.MoveTowards(transform.position, startPosition, (moveSpeed * 2f) * Time.deltaTime);
+                    break;
+            }
+
+
+            takenDamageThisFrame = false;
+        }
+
     }
+
+    private void OnCollisionHandler(Collision collision)
+    {
+        if (initialized)
+        {
+            TakeDamage();
+        }
+    }
+
+    private void TakeDamage()
+    {
+        if (takenDamageThisFrame == false)
+        {
+            takenDamageThisFrame = true;
+
+            hitPoints--;
+
+            if (hitPoints <= 0)
+            {
+                Destroyed();
+            }
+
+            //Play on hit animatino/vfx
+        }
+    }
+
+    private void Destroyed()
+    {
+        //Play death animation
+        if (potato)
+        {
+            potatoes.ReturnPotato(potato);
+            potato = null;
+        }
+        StopAllCoroutines();
+        initialized = false;
+
+        DestroyedAction?.Invoke(this);
+    }
+
+    private IEnumerator StealPotatoRoutine()
+    {
+        //TODO: check if there potato is already used
+        potato = potatoes.StealPotato();
+
+        if (potato != null)
+        {
+            Vector3 dir = potato.transform.position - transform.position;
+            dir = Vector3.ProjectOnPlane(dir, Vector3.up);
+
+            armPivotTransform.forward = dir;
+
+            //potato.transform.position = clawTransform.position;
+            while (Vector3.Distance(clawTransform.position, potato.transform.position) > 0.1f)
+            {
+                Vector3 stealDir = potato.transform.position - clawTransform.position;
+                potato.transform.position -= stealDir.normalized * 1.5f * Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            potato.transform.SetParent(transform);
+
+
+        }
+
+        //yield return new WaitForSeconds(stealTime);
+
+        carState = State.Escape;
+
+        stealRoutine = null;
+    }
+
+
 }
