@@ -14,6 +14,8 @@ public abstract class Spawner : MonoBehaviour
 	private float spawnRate;
 
 	[SerializeField]
+	private Transform spawnLocationParent;
+	[SerializeField]
 	private Transform spawnLocationMin;
 	[SerializeField]
 	private Transform spwnLocationMax;
@@ -46,15 +48,20 @@ public abstract class Spawner : MonoBehaviour
 
 	protected virtual void Spawn() { }
 
-	protected Vector3 GetSpawnLocation()
+	protected Transform GetSpawnLocation()
 	{
+		GameObject spawnLocationObject = new GameObject("Spawn Location Object");
+		spawnLocationObject.transform.parent = spawnLocationParent;
+
 		Vector3 spawnLocation = Vector3.zero;
 
 		spawnLocation.x = UnityEngine.Random.Range(spawnLocationMin.position.x, spwnLocationMax.position.x);
 		spawnLocation.y = UnityEngine.Random.Range(spawnLocationMin.position.y, spwnLocationMax.position.y);
 		spawnLocation.z = UnityEngine.Random.Range(spawnLocationMin.position.z, spwnLocationMax.position.z);
 
-		return spawnLocation;
+		spawnLocationObject.transform.position = spawnLocation;
+
+		return spawnLocationObject.transform;
 	}
 
 }

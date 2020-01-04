@@ -36,7 +36,7 @@ public class RoboCar : MonoBehaviour
 
 	private State carState = State.Approach;
 
-	private Vector3 startPosition;
+	private Transform startPositionTransform;
 	private Vector3 targetPosition;
 
 	private bool initialized;
@@ -54,13 +54,13 @@ public class RoboCar : MonoBehaviour
 	}
 
 
-	public void Initialize(PotatoPile potatoPile, Vector3 targetPosition)
+	public void Initialize(PotatoPile potatoPile, Transform spawnLocationTransform, Vector3 targetPosition)
 	{
 		potatoes = potatoPile;
 
 		hitPoints = maxHitPoints;
 
-		startPosition = transform.position;
+		startPositionTransform = spawnLocationTransform;
 		this.targetPosition = targetPosition;
 
 		stealRoutine = null;
@@ -92,7 +92,18 @@ public class RoboCar : MonoBehaviour
 					break;
 
 				case State.Escape:
-					transform.position = Vector3.MoveTowards(transform.position, startPosition, (moveSpeed * 2f) * Time.deltaTime);
+					transform.position = Vector3.MoveTowards(transform.position, startPositionTransform.position, (moveSpeed * 2f) * Time.deltaTime);
+					if(Vector3.Distance(transform.position, startPositionTransform.position) <= 0.1f)
+					{
+						//We have escaped
+
+						//Do something now that we have successfully stolen a potato
+						potato = null;
+
+						//Remove Robo cart from scene for performance
+						//Side note, only 3 of them could successfully escape before we lose the game
+						Destroyed();
+					}
 					break;
 			}
 
@@ -153,7 +164,6 @@ public class RoboCar : MonoBehaviour
 
 			armPivotTransform.forward = dir;
 
-            //potato.transform.position = clawTransform.position;
             while(Vector3.Distance(clawTransform.position, potato.transform.position) > 0.1f)
             {
                 Vector3 stealDir = potato.transform.position - clawTransform.position;
@@ -165,7 +175,6 @@ public class RoboCar : MonoBehaviour
 
 		}
 
-		//yield return new WaitForSeconds(stealTime);
 
 		carState = State.Escape;
 

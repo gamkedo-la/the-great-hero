@@ -24,11 +24,13 @@ public class RoboCarSpawner : Spawner
 
 		//RoboCar roboCar = component.GetComponent<RoboCar>();
 
-		Vector3 spawnLocation = GetSpawnLocation();
-		roboCar.transform.position = spawnLocation;
+		Transform spawnTransform = GetSpawnLocation();
+		roboCar.transform.position = spawnTransform.position;
 
-		spawnLocation.z = TARGET_Z_POS;
-		roboCar.Initialize(potatoPile, spawnLocation);
+		Vector3 targetPosition = spawnTransform.position;
+		targetPosition.z = TARGET_Z_POS;
+		
+		roboCar.Initialize(potatoPile, spawnTransform, targetPosition);
 
 		roboCar.DestroyedAction += OnRoboCarDestroyed;
 

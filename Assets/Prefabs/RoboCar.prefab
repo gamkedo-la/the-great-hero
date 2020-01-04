@@ -421,7 +421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armPivotTransform: {fileID: 7046914440863891148}
   clawTransform: {fileID: 1046230599873623934}
-  moveSpeed: 12
+  moveSpeed: 18
   stealTime: 2.5
   hitPoints: 5
   collisionReporters:
