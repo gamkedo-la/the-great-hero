@@ -23,5 +23,22 @@ public class CameraScript : MonoBehaviour
         pitch -= speedV * Input.GetAxis("Mouse Y");
 
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            ToggleSound();
+        }
+    }
+
+    void ToggleSound()
+    {
+        if(AudioListener.volume == 0)
+        {
+            AudioListener.volume = 1;
+        }
+        else
+        {
+            AudioListener.volume = 0;
+        }
     }
 }
