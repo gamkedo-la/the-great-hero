@@ -7,33 +7,46 @@ public class PotatoPile : MonoBehaviour
 	[SerializeField]
 	protected List<GameObject> potates;
 
-    private Vector3 startPos;
+    int potatoToSteal;
 
     void Start()
     {
-        startPos = transform.position;
+        potatoToSteal = potates.Count - 1;
+
+        foreach (var potato in potates)
+        {
+            potato.GetComponent<Potato>().InitializePotato();
+        }
     }
 
     public GameObject StealPotato()
 	{
 		GameObject potato = null;
 
-		if (potates.Count > 0)
+		if (potates.Count > 0 && potatoToSteal > 0)
 		{
-			potato = potates[potates.Count - 1];
+			potato = potates[potatoToSteal];
 
-            Debug.Log("Stealing Potato " + potato.name);
-			potates.Remove(potato);
-		}
+            potato.GetComponent<Potato>().StealPotato();
+
+            //Debug.Log("Stealing Potato " + potato.name);
+            potatoToSteal--;
+        }
 
 		return potato;
 	}
 
+    public void PotatoStolenSuccessfully(GameObject potato)
+    {
+        potato.GetComponent<Potato>().PotatoStolen();
+        potates.Remove(potato);
+    }
+
     public void ReturnPotato(GameObject potato)
     {
+        potato.GetComponent<Potato>().ReturnToPile();
         potates.Add(potato);
-        potato.transform.SetParent(null);
-        transform.position = startPos;
+        potatoToSteal++;
     }
 }
  
