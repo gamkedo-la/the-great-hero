@@ -171,8 +171,7 @@ public class RoboCar : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
             potato.transform.SetParent(transform);
-
-
+			potatoes.PotatoStolenSuccessfully(potato);
 		}
 
 

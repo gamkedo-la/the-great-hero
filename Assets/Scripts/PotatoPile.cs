@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class PotatoPile : MonoBehaviour
 {
-	[SerializeField]
-	protected List<GameObject> potates;
+    [SerializeField]
+    private PotatoGuage potatoGuage;
+
+    [SerializeField]
+	protected List<GameObject> potatoes;
 
     int potatoToSteal;
 
     void Start()
     {
-        potatoToSteal = potates.Count - 1;
+        potatoGuage.SetPotatoGauge(potatoes.Count);
 
-        foreach (var potato in potates)
+        potatoToSteal = potatoes.Count - 1;
+
+        foreach (var potato in potatoes)
         {
             potato.GetComponent<Potato>().InitializePotato();
         }
@@ -23,9 +28,9 @@ public class PotatoPile : MonoBehaviour
 	{
 		GameObject potato = null;
 
-		if (potates.Count > 0 && potatoToSteal > 0)
+		if (potatoes.Count > 0 && potatoToSteal >= 0)
 		{
-			potato = potates[potatoToSteal];
+			potato = potatoes[potatoToSteal];
 
             potato.GetComponent<Potato>().StealPotato();
 
@@ -39,13 +44,14 @@ public class PotatoPile : MonoBehaviour
     public void PotatoStolenSuccessfully(GameObject potato)
     {
         potato.GetComponent<Potato>().PotatoStolen();
-        potates.Remove(potato);
+        potatoes.Remove(potato);
+
+        potatoGuage.SetPotatoGauge(potatoes.Count);
     }
 
     public void ReturnPotato(GameObject potato)
     {
         potato.GetComponent<Potato>().ReturnToPile();
-        potates.Add(potato);
         potatoToSteal++;
     }
 }
