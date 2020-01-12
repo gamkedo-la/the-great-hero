@@ -8,6 +8,7 @@ public class SpawnTurretProjectiles : MonoBehaviour
     public GameObject firePoint;
     public List<GameObject> vfx = new List<GameObject>();
     public float spawnTime;
+    private float spawnKey = 1;
 
     private GameObject effectToSpawn;
     // Start is called before the first frame update
@@ -19,7 +20,7 @@ public class SpawnTurretProjectiles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (spawnTime == 1)
+        if (spawnKey == 1)
         {
             SpawnVFX();
         }
@@ -32,7 +33,7 @@ public class SpawnTurretProjectiles : MonoBehaviour
         if(firePoint != null)
         {
             vfx = Instantiate(effectToSpawn, firePoint.transform.position, Quaternion.identity);
-            spawnTime = 0;
+            spawnKey = 0;
 
             StartCoroutine(TimebeforeProjectile());
         }
@@ -45,7 +46,7 @@ public class SpawnTurretProjectiles : MonoBehaviour
     IEnumerator TimebeforeProjectile()
     {
         yield return new WaitForSeconds(spawnTime);
-        spawnTime = 1;
+        spawnKey = 1;
     }
 
     void OnCollisionEnter(Collision collision)
