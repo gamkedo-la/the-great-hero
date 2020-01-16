@@ -20,6 +20,8 @@ public abstract class Spawner : MonoBehaviour
 	[SerializeField]
 	private Transform spwnLocationMax;
 
+	public bool ShouldStartSpawning { get; set; }
+
 	private float timer = 0f;
 
 	protected ComponentPool componentPool;
@@ -31,19 +33,25 @@ public abstract class Spawner : MonoBehaviour
 
 		//Spawn at the start
 		timer = spawnRate;
+
+		//Remove this so that we can have waves of enemies;
+		//ShouldStartSpawning = true;
 	}
 
 	private void Update()
 	{
-		if (timer >= spawnRate)
+		if (ShouldStartSpawning)
 		{
-			//Spawn Robo Car
-			Spawn();
+			if (timer >= spawnRate)
+			{
+				//Spawn Robo Car
+				Spawn();
 
-			timer = timer - spawnRate;
+				timer = timer - spawnRate;
+			}
+
+			timer += Time.deltaTime;
 		}
-
-		timer += Time.deltaTime;
 	}
 
 	protected virtual void Spawn() { }

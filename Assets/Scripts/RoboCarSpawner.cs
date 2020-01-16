@@ -10,19 +10,16 @@ public class RoboCarSpawner : Spawner
 
 
 	protected override void Start()
-	{
-		base.Start();
-
+	{		
+		base.Start();//This must run so that ComonentPool is created
+		
 		componentPool.InitializeObjectPool<RoboCar>(pooledPrefab, pooledCount, transform);
 	}
 
 
 	protected override void Spawn()
 	{
-		//Component component = componentPool.GetObject() as RoboCar;
 		RoboCar roboCar = componentPool.GetObject() as RoboCar;
-
-		//RoboCar roboCar = component.GetComponent<RoboCar>();
 
 		Transform spawnTransform = GetSpawnLocation();
 		roboCar.transform.position = spawnTransform.position;
@@ -41,6 +38,7 @@ public class RoboCarSpawner : Spawner
 	{
 		roboCar.DestroyedAction -= OnRoboCarDestroyed;
 
+		//Return the object back to the pool
 		componentPool.ReturnObject(roboCar);
 	}
 

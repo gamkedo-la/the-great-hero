@@ -28,20 +28,14 @@ public class BatAI : MonoBehaviour
 	private PotatoPile potatoes;
 	private Coroutine stealRoutine;
 	private GameObject potato;
-	private State carState = State.Approach;
+	private State batState = State.Approach;
 
 	public Action<BatAI> DestroyedAction;
-
-	private Vector3 startPosition;
-	private Vector3 targetPosition;
 
 	private bool initialized;
 	private bool takenDamageThisFrame;
 	private int maxHitPoints;
 
-
-	[SerializeField]
-	private Transform armPivotTransform;
 	[SerializeField]
 	private Transform clawTransform;
 
@@ -68,69 +62,62 @@ public class BatAI : MonoBehaviour
 	}
 
 
-	public void Initialize(PotatoPile potatoPile, Vector3 targetPosition)
+	public void Initialize(PotatoPile potatoPile)
 	{
 		potatoes = potatoPile;
 
 		hitPoints = maxHitPoints;
 
-		startPosition = transform.position;
-		this.targetPosition = targetPosition;
-
 		stealRoutine = null;
 
 		initialized = true;
-	}
-	// Start is called before the first frame update
-	void Start()
-	{
-
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		if (stateNow == B_State_Approach)
-		{
-			transform.LookAt(FromAnywhereSingleton.instance.transform.position);
+		//if (stateNow == B_State_Approach)
+		//{
+		//	transform.LookAt(FromAnywhereSingleton.instance.transform.position);
 
-			transform.position += transform.forward * Time.deltaTime * batSpeed;
+		//	transform.position += transform.forward * Time.deltaTime * batSpeed;
 
-			if (Vector3.Distance(transform.position, FromAnywhereSingleton.instance.transform.position) < batHoverDist)
-			{
-				stateNow++;
-				stealPos = transform.position;
+		//	if (Vector3.Distance(transform.position, FromAnywhereSingleton.instance.transform.position) < batHoverDist)
+		//	{
+		//		stateNow++;
+		//		stealPos = transform.position;
 
-				stealStartTime = Time.timeSinceLevelLoad;
-			}
-		}
-		else if (stateNow == B_State_Stealing)
-		{
-			float timeStealing = Time.timeSinceLevelLoad - stealStartTime;
-			transform.position = stealPos + batHoverAmt * Vector3.up * Mathf.Cos(timeStealing * batHoverSpeed);
+		//		stealStartTime = Time.timeSinceLevelLoad;
+		//	}
+		//}
+		//else if (stateNow == B_State_Stealing)
+		//{
+		//	float timeStealing = Time.timeSinceLevelLoad - stealStartTime;
+		//	transform.position = stealPos + batHoverAmt * Vector3.up * Mathf.Cos(timeStealing * batHoverSpeed);
 
-			if (timeStealing > batStealTime)
-			{
-				stateNow++;
-			}
-		}
-		else if (stateNow == B_State_Retreat)
-		{
-			transform.LookAt(FromAnywhereSingleton.instance.transform.position);
+		//	if (timeStealing > batStealTime)
+		//	{
+		//		stateNow++;
+		//	}
+		//}
+		//else if (stateNow == B_State_Retreat)
+		//{
+		//	transform.LookAt(FromAnywhereSingleton.instance.transform.position);
 
-			transform.position -= transform.forward * Time.deltaTime * batSpeed;
-		}
+		//	transform.position -= transform.forward * Time.deltaTime * batSpeed;
+		//}
 
 		if (initialized)
 		{
-			switch (carState)
+			switch (batState)
 			{
 				case State.Approach:
-					transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+					transform.LookAt(FromAnywhereSingleton.instance.transform.position);
+					transform.position += transform.forward * Time.deltaTime * batSpeed;
 
-					if (Vector3.Distance(transform.position, targetPosition) == 0)
+					if (Vector3.Distance(transform.position, FromAnywhereSingleton.instance.transform.position) < batHoverDist)
 					{
-						carState = State.Steal;
+						batState = State.Steal;
 					}
 					break;
 
@@ -142,7 +129,9 @@ public class BatAI : MonoBehaviour
 					break;
 
 				case State.Escape:
-					transform.position = Vector3.MoveTowards(transform.position, startPosition, (moveSpeed * 2f) * Time.deltaTime);
+					transform.LookAt(FromAnywhereSingleton.instance.transform.position);
+
+					transform.position -= transform.forward * Time.deltaTime * batSpeed;
 					break;
 			}
 
@@ -186,8 +175,6 @@ public class BatAI : MonoBehaviour
 		initialized = false;
 
 		DestroyedAction?.Invoke(this);
-
-		GameObject.Destroy(this.gameObject);
 	}
 
 	private IEnumerator StealPotatoRoutine()
@@ -197,12 +184,8 @@ public class BatAI : MonoBehaviour
 
 		if (potato != null)
 		{
-			Vector3 dir = potato.transform.position - transform.position;
-			dir = Vector3.ProjectOnPlane(dir, Vector3.up);
+			transform.LookAt(potato.transform);
 
-			armPivotTransform.forward = dir;
-
-			//potato.transform.position = clawTransform.position;
 			while (Vector3.Distance(clawTransform.position, potato.transform.position) > 0.1f)
 			{
 				Vector3 stealDir = potato.transform.position - clawTransform.position;
@@ -210,16 +193,10 @@ public class BatAI : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			}
 			potato.transform.SetParent(transform);
-
-
 		}
 
-		//yield return new WaitForSeconds(stealTime);
-
-		carState = State.Escape;
+		batState = State.Escape;
 
 		stealRoutine = null;
 	}
-
-
 }
