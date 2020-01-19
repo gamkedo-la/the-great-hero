@@ -193,6 +193,7 @@ public class BatAI : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			}
 			potato.transform.SetParent(transform);
+			potatoes.PotatoStolenSuccessfully(potato);
 		}
 
 		batState = State.Escape;
