@@ -33,12 +33,12 @@ public class PotatoPile : MonoBehaviour
 
     void Update()
     {
-        if(potatoes.Count == 0)
+        if(potatoes.Count <= 0)
         {
             Lost = true;
             Time.timeScale = 0.0f;
             TryAgain.SetActive(true);
-            if (timeFrozenForMenu && Lost == true)
+            if (Lost == true)
             {
                 if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
                 {

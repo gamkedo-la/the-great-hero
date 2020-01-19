@@ -10,7 +10,7 @@ public class EndGameTrigger : MonoBehaviour
     public GameObject TryAgain;
     public GameObject Win;
 
-    private bool Won = false;
+    public bool Won = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +23,7 @@ public class EndGameTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timeFrozenForMenu && Won == true)
+        if (Won == true)
         {
             if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
             {
@@ -34,7 +34,7 @@ public class EndGameTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "MainCamera")
+        if(other)
         {
             Won = true;
             Time.timeScale = 0.0f; // freeze time
