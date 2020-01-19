@@ -8,16 +8,26 @@ public class RoboCarSpawner : Spawner
 	[SerializeField]
 	private PotatoPile potatoPile;
 
+    public CollisionReporter collisionReporter;
 
-	protected override void Start()
-	{		
-		base.Start();//This must run so that ComonentPool is created
+    protected override void Start()
+	{
+        if (collisionReporter != null)
+        {
+            collisionReporter.OnTriggerEvent += Collided;
+        }
+        base.Start();//This must run so that ComonentPool is created
 		
 		componentPool.InitializeObjectPool<RoboCar>(pooledPrefab, pooledCount, transform);
 	}
 
+    private void Collided(Collider collision)
+    {
+        ShouldStartSpawning = true;
+    }
 
-	protected override void Spawn()
+
+    protected override void Spawn()
 	{
 		RoboCar roboCar = componentPool.GetObject() as RoboCar;
 

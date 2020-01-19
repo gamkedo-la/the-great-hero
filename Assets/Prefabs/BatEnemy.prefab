@@ -326,7 +326,7 @@ MonoBehaviour:
   clawTransform: {fileID: 936215695092323819}
   moveSpeed: 5
   stealTime: 2.5
-  hitPoints: 3
+  hitPoints: 1
   collisionReporters:
   - {fileID: 5870965219542159759}
   - {fileID: 4162523755763805114}
