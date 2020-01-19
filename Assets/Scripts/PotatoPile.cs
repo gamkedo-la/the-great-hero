@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PotatoPile : MonoBehaviour
 {
@@ -10,10 +11,15 @@ public class PotatoPile : MonoBehaviour
     [SerializeField]
 	protected List<GameObject> potatoes;
 
+    bool timeFrozenForMenu = true;
+    public GameObject TryAgain;
+    public bool Lost = false;
     int potatoToSteal;
 
     void Start()
     {
+        Lost = false;
+
         potatoGuage.SetPotatoGauge(potatoes.Count);
 
         potatoToSteal = potatoes.Count - 1;
@@ -21,6 +27,23 @@ public class PotatoPile : MonoBehaviour
         foreach (var potato in potatoes)
         {
             potato.GetComponent<Potato>().InitializePotato();
+        }
+    }
+
+    void Update()
+    {
+        if(potatoes.Count == 0)
+        {
+            Lost = true;
+            Time.timeScale = 0.0f;
+            TryAgain.SetActive(true);
+            if (timeFrozenForMenu && Lost == true)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
+                {
+                    SceneManager.LoadScene("MainScene");
+                }
+            }
         }
     }
 
