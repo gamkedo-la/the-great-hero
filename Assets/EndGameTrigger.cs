@@ -16,6 +16,8 @@ public class EndGameTrigger : MonoBehaviour
     void Start()
     {
         Won = false;
+        TryAgain.SetActive(false);
+        Win.SetActive(false);
     }
 
     // Update is called once per frame
@@ -37,7 +39,7 @@ public class EndGameTrigger : MonoBehaviour
             Won = true;
             Time.timeScale = 0.0f; // freeze time
             TryAgain.SetActive(false);
-            Win.SetActive(false);
+            Win.SetActive(true);
         }
     }
 }

@@ -19,6 +19,7 @@ public class PotatoPile : MonoBehaviour
     void Start()
     {
         Lost = false;
+        TryAgain.SetActive(false);
 
         potatoGuage.SetPotatoGauge(potatoes.Count);
 
